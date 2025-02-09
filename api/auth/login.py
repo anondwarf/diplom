@@ -8,7 +8,7 @@ from utils.helpers import random_user
 class Login(ApiClient):
 
     def __init__(self, payload: dict[str, str] | None = None):
-        self._url = environment.BASE_URL + ApiHands.AUTH_USER
+        self._url = environment.BASE_URL + ApiHands.AUTH_LOGIN
         self._method = HttpMethods.POST
         self._payload = payload
         self._check_payload()

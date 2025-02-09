@@ -7,7 +7,7 @@ from utils.enums import HttpMethods
 class User(ApiClient):
 
     def __init__(self, headers: dict[str, str] | None = None):
-        self._url = environment.BASE_URL + ApiHands.AUTH_USER
+        self._url = environment.BASE_URL + ApiHands.AUTH_LOGIN
         self._headers = headers
 
     def _check_headers(self):
