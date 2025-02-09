@@ -1,7 +1,7 @@
 from utils.http.client import ApiClient
 from utils.helpers import environment
 from utils.enums import ApiHands, HttpMethods
-from utils.helpers import random_user
+from utils.helpers import random_user, change_payload
 
 
 class Register(ApiClient):
@@ -30,12 +30,7 @@ class Register(ApiClient):
 
     def register_user_bad_payload(self, param: str):
         user = random_user()
-
-        def _remove_key(d: dict, key: str) -> dict:
-            d.pop(key)
-            return d
-
-        bad_user = _remove_key(user, param)
+        bad_user = change_payload(user, param)
 
         return self.custom_requests(method=self._method, url=self._url, payload=bad_user)
 
