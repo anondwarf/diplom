@@ -9,9 +9,15 @@ def generate_headers(token: str) -> dict[str, str]:
         "Accept": "application/json"
     }
 
-def change_payload(payload: dict[str, str], param: str) -> dict[str, str]:
+def delete_key_json(payload: dict[str, str], param: str) -> dict[str, str]:
     payload.pop(param)
     return payload
+
+
+def change_value_json(payload: dict[str, str], param: str, new_value: str) -> dict[str, str]:
+    payload[param] = new_value
+    return payload
+
 
 def write_user_change(data: dict[str, str], param: str) -> None:
     new_value = data.get(param)

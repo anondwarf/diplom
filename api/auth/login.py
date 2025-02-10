@@ -2,7 +2,7 @@ from utils.http.client import ApiClient
 from utils.helpers import environment
 from utils.enums.api_hands import ApiHands
 from utils.enums.http_methods import HttpMethods
-from utils.helpers import random_user, change_payload, generate_headers
+from utils.helpers import random_user, delete_key_json, generate_headers
 
 
 class Login(ApiClient):
@@ -17,7 +17,7 @@ class Login(ApiClient):
     def _check_payload(self):
         if self._payload is None:
             user = environment.user
-            self._payload = change_payload(user, "name")
+            self._payload = delete_key_json(user, "name") # type: ignore
 
     @property
     def login_existing_user(self):
@@ -26,13 +26,12 @@ class Login(ApiClient):
     @property
     def login_non_existing_user(self):
         user = random_user()
-        payload = change_payload(user, "name")
+        payload = delete_key_json(user, "name")
 
         return self.custom_requests(method=self._method, url=self._url, payload=payload)
 
     @property
     def headers(self):
-        if self._headers is None:
-            response = self.login_existing_user.json()
-            self._headers = generate_headers(response.get["accessToken"])
+        response = self.login_existing_user.json()
+        self._headers = generate_headers(response.get("accessToken"))
         return self._headers

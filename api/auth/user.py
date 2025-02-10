@@ -16,11 +16,6 @@ class User(ApiClient):
             raise ValueError("Headers are not set")
 
     @property
-    def headers(self):
-        return self._headers
-
-
-    @property
     def delete_user(self):
         self._check_headers()
 
@@ -30,9 +25,6 @@ class User(ApiClient):
         if self._headers is None:
             self._headers = Login.headers
 
-        user = environment.user
-        payload = {
-            "user": change_payload(user, param)
-        }
+        payload = {"user": change_payload(environment.user, param)}
 
         return self.custom_requests(url=self._url, method=HttpMethods.PATCH, headers=self._headers, data=payload)
