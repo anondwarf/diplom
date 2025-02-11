@@ -30,7 +30,11 @@ class Login(ApiClient):
         return self.custom_requests(method=self._method, url=self._url, data=user_without_name)
 
     @property
+    def login(self):
+        return self.custom_requests(method=self._method, url=self._url, data=self._payload)
+
+    @property
     def headers(self):
-        response = self.login_existing_user.json()
-        self._headers = generate_headers(response.get("accessToken"))
+        response = self.login_existing_user
+        self._headers = generate_headers(response.json().get("accessToken"))
         return self._headers
