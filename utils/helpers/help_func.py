@@ -9,19 +9,19 @@ def generate_headers(token: str) -> dict[str, str]:
         "Content-Type": "application/json",
         "Accept": "application/json"
     }
-    allure.attach(body=headers, name="headers", attachment_type=allure.attachment_type.JSON)
+    allure.dynamic.parameter(name="headers", value=headers)
     return headers
 
 
 def delete_key_json(data: dict[str, str], param: str) -> dict[str, str]:
     data.pop(param)
-    allure.attach(body=data, name="edited data", attachment_type=allure.attachment_type.JSON)
+    allure.dynamic.parameter(name="edited data", value=data)
     return data
 
 
 def change_key_value_json(data: dict[str, str], param: str, new_value: str) -> dict[str, str]:
     data[param] = new_value
-    allure.attach(body=data, name="edited data", attachment_type=allure.attachment_type.JSON)
+    allure.dynamic.parameter(name="edited data", value=data)
     return data
 
 

@@ -21,5 +21,5 @@ def random_user(length: int = 10) -> dict[str, str]:
         "password": random_string(length),
         "name": random_string(length),
     }
-    allure.attach(body=data, name="Случайный пользователь", attachment_type=allure.attachment_type.JSON)
+    allure.dynamic.parameter(name="Случайный пользователь", value=data)
     return data

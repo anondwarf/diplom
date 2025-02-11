@@ -3,7 +3,7 @@ from api.auth import Login
 from utils.enums import HttpCodes
 
 
-@allure.suite("Login Test")
+@allure.suite("Авторизация")
 class TestLogin:
 
     @allure.title("Проверка авторизации существующего пользователя")
