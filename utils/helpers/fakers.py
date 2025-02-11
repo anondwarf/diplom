@@ -1,5 +1,5 @@
 import allure
-from random import choices
+from random import choices, choice
 from string import ascii_letters
 
 
@@ -23,3 +23,13 @@ def random_user(length: int = 10) -> dict[str, str]:
     }
     allure.dynamic.parameter(name="Случайный пользователь", value=data)
     return data
+
+
+def generate_random_list(length: int, data: list[str] | None = None) -> list[str]:
+    result_list = []
+    for _ in range(length):
+        if data is not None:
+            result_list.append(choice(data))
+        else:
+            result_list.append(random_string())
+    return result_list
