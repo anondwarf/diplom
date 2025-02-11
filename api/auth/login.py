@@ -16,12 +16,12 @@ class Login(ApiClient):
 
     def _check_payload(self):
         if self._payload is None:
-            user = environment.user
-            self._payload = delete_key_json(data=user, param="name") # type: ignore
+            self._payload = environment.user
 
     @property
     def login_existing_user(self):
-        return self.custom_requests(method=self._method, url=self._url, data=self._payload)
+        payload = delete_key_json(data=self._payload, param="name")
+        return self.custom_requests(method=self._method, url=self._url, data=payload)
 
     @property
     def login_non_existing_user(self):

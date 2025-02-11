@@ -23,6 +23,7 @@ class User(ApiClient):
 
     def patch_user(self, param: str):
         self._headers = Login().headers
+        payload = {}
 
         if param == "email":
             payload = {"user": { param: random_email()}}
