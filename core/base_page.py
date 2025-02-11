@@ -2,6 +2,7 @@ import allure # type: ignore
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 class BasePage(object):
@@ -37,3 +38,12 @@ class BasePage(object):
                 return True
             else:
                 return False
+
+    def is_url_contains_uri(self, uri: str) -> bool:
+        with allure.step(f"Проверка наличия uri {uri} в url"): # type: ignore
+            return self.wait.until(EC.url_contains(uri))
+
+    def move_element(self, start_locator: tuple[str, str], end_locator: tuple[str, str]) -> None:
+        with allure.step(f"Перемещение элемента {start_locator} в {end_locator}"): # type: ignore
+            action = ActionChains(self.driver)
+            action.drag_and_drop(self.wait.until(EC.presence_of_element_located(start_locator)), self.wait.until(EC.presence_of_element_located(end_locator))).perform()
