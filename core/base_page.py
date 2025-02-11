@@ -18,7 +18,8 @@ class BasePage(object):
 
     @property
     def is_opened(self) -> bool:
-        return self.wait.until(EC.url_contains(self.page_url))
+        with allure.step(f"Проверка открытия страницы {self.page_url}"): # type: ignore
+            return self.wait.until(EC.url_contains(self.page_url))
 
     def click(self, locator: tuple[str, str]) -> None:
         with allure.step(f"Клик по элементу {locator}"): # type: ignore
@@ -46,4 +47,6 @@ class BasePage(object):
     def move_element(self, start_locator: tuple[str, str], end_locator: tuple[str, str]) -> None:
         with allure.step(f"Перемещение элемента {start_locator} в {end_locator}"): # type: ignore
             action = ActionChains(self.driver)
-            action.drag_and_drop(self.wait.until(EC.presence_of_element_located(start_locator)), self.wait.until(EC.presence_of_element_located(end_locator))).perform()
+            start_element = self.wait.until(EC.presence_of_element_located(start_locator))
+            end_element = self.wait.until(EC.presence_of_element_located(end_locator))
+            action.drag_and_drop(start_element, end_element).perform()

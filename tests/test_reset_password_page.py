@@ -1,9 +1,12 @@
+import allure # type: ignore
 from selenium.webdriver.chrome.webdriver import WebDriver
 from pages import LoginPage, ForgotPasswordPage, ResetPassword
 
 
+@allure.suite("Страница восстановления пароля")
 class TestResetPasswordPage(object):
 
+    @allure.title("Проверка перехода на страницу восстановления пароля")
     def test_redirect_to_page(self, driver: WebDriver) -> None:
         forgot_password_page = ForgotPasswordPage(driver=driver)
         login_page = LoginPage(driver=driver)
@@ -11,6 +14,7 @@ class TestResetPasswordPage(object):
         login_page.click_forgot_password_link()
         assert forgot_password_page.is_opened
 
+    @allure.title("Проверка ввода email для восстановления пароля")
     def test_enter_email_reset(self, driver: WebDriver) -> None:
         forgot_password_page = ForgotPasswordPage(driver=driver)
         reset_password_page = ResetPassword(driver=driver)
@@ -19,6 +23,7 @@ class TestResetPasswordPage(object):
         forgot_password_page.click_restore_button()
         assert reset_password_page.is_opened
 
+    @allure.title("Проверка активации поля ввода пароля")
     def test_active_input_password(self, driver: WebDriver) -> None:
         forgot_password_page = ForgotPasswordPage(driver=driver)
         reset_password_page = ResetPassword(driver=driver)
