@@ -50,3 +50,7 @@ class BasePage(object):
             start_element = self.wait.until(EC.presence_of_element_located(start_locator))
             end_element = self.wait.until(EC.presence_of_element_located(end_locator))
             action.drag_and_drop(start_element, end_element).perform()
+
+    def get_text(self, locator: tuple[str, str]) -> str:
+        with allure.step(f"Получение текста элемента {locator}"): # type: ignore
+            return self.wait.until(EC.presence_of_element_located(locator)).text
