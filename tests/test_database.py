@@ -1,29 +1,29 @@
-from praktikum.ingredient import Ingredient
+from praktikum.database import Database
+from praktikum.ingredient_types import INGREDIENT_TYPE_SAUCE, INGREDIENT_TYPE_FILLING
 
-def test_name_is_set_correctly():
-    ingredient = Ingredient("Filling", "Tomato", 0.3)
-    assert ingredient.get_name() == "Tomato"
+class TestDatabase:
+    def setup_method(self):
+        self.db = Database()
 
-def test_price_is_set_correctly():
-    ingredient = Ingredient("Sauce", "Ketchup", 0.2)
-    assert ingredient.get_price() == 0.2
+    def test_available_buns(self):
+        buns = self.db.available_buns()
+        assert isinstance(buns, list)
+        assert len(buns) == 3
+        expected_names = {"black bun", "white bun", "red bun"}
+        actual_names = {bun.name for bun in buns}
+        assert actual_names == expected_names
 
-def test_type_is_set_correctly():
-    ingredient = Ingredient("Sauce", "Mustard", 0.1)
-    assert ingredient.get_type() == "Sauce"
-
-def test_name_is_empty_string():
-    ingredient = Ingredient("Filling", "", 0.4)
-    assert ingredient.get_name() == ""
-
-def test_price_is_zero():
-    ingredient = Ingredient("Filling", "Onion", 0.0)
-    assert ingredient.get_price() == 0.0
-
-def test_price_is_negative():
-    ingredient = Ingredient("Sauce", "Mayonnaise", -0.1)
-    assert ingredient.get_price() == -0.1
-
-def test_type_is_empty_string():
-    ingredient = Ingredient("", "Pickle", 0.2)
-    assert ingredient.get_type() == ""
+    def test_available_ingredients(self):
+        ingredients = self.db.available_ingredients()
+        assert isinstance(ingredients, list)
+        assert len(ingredients) == 6
+        expected_ingredients = {
+            (INGREDIENT_TYPE_SAUCE, "hot sauce", 100),
+            (INGREDIENT_TYPE_SAUCE, "sour cream", 200),
+            (INGREDIENT_TYPE_SAUCE, "chili sauce", 300),
+            (INGREDIENT_TYPE_FILLING, "cutlet", 100),
+            (INGREDIENT_TYPE_FILLING, "dinosaur", 200),
+            (INGREDIENT_TYPE_FILLING, "sausage", 300),
+        }
+        actual_ingredients = {(ing.type, ing.name, ing.price) for ing in ingredients}
+        assert actual_ingredients == expected_ingredients
