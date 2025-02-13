@@ -20,7 +20,6 @@ def create_order():
 
     response = requests.post(url=url, headers=headers, data=json.dumps({"ingredients": ingredients}))
     order_data = response.json().get("order")
-    print(order_data)
     if order_data is None:
         raise ValueError("Order creation failed, 'order' key not found in response")
     order_number = order_data.get("number")

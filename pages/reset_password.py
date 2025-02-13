@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from core import BasePage
 from core.base_page import WebDriver
@@ -16,9 +17,11 @@ class ResetPassword(BasePage):
         super().__init__(driver)
         self.page_url = str(WebLink.RESET_PASSWORD)
 
+    @allure.step("Click hide icon")
     def click_hide_icon(self) -> None:
         self.click(locator=_Locators.INPUT_HIDE_ICON)
 
     @property
     def is_active_input_password(self) -> bool:
-        return self.is_element_present(locator=_Locators.INPUT_ACTIVE)
+        with allure.step("Check active input password"):
+            return self.is_element_present(locator=_Locators.INPUT_ACTIVE)

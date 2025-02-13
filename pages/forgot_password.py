@@ -1,3 +1,4 @@
+import allure
 from core import BasePage
 from utils.enums import WebLink
 from selenium.webdriver.common.by import By
@@ -16,8 +17,10 @@ class ForgotPasswordPage(BasePage):
         super().__init__(driver)
         self.page_url = str(WebLink.FORGOT_PASSWORD)
 
+    @allure.step("Input email")
     def input_email(self, email: str) -> None:
         self.input_text(locator=_Locators.INPUT_EMAIL, text=email)
 
+    @allure.step("Click restore button")
     def click_restore_button(self) -> None:
         self.click(locator=_Locators.BUTTON_RESET_PASSWORD)

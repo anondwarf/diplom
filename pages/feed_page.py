@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from core import BasePage
 from core.base_page import WebDriver
@@ -13,6 +14,14 @@ class _Locators(object):
     CREATED_ORDER_NUMBER = (By.XPATH, "//p[contains(@class, 'OrderFeed_number')]")
     IN_WORK_ORDERS = (By.XPATH, "//ul[contains(@class, 'OrderFeed_orderListReady')]")
 
+    @staticmethod
+    def dynamic_order_number(order_number: str) -> tuple[str, str]:
+        return (By.XPATH, f"//p[text()='{order_number}']")
+
+    @staticmethod
+    def dynamic_order_number_in_work(order_number: str) -> tuple[str, str]:
+        return (By.XPATH, f"//ul/li[text()='{order_number}']")
+
 
 class FeedPage(BasePage):
 
@@ -23,31 +32,38 @@ class FeedPage(BasePage):
 
     @property
     def get_first_order_number(self) -> str:
-        self._order_number = self.get_text(_Locators.FIRST_ORDER_NUMBER)
-        return self._order_number
+        with allure.step("Get first order number"):
+            self._order_number = self.get_text(_Locators.FIRST_ORDER_NUMBER)
+            return self._order_number
 
     @property
     def open_details_first_order(self) -> None:
-        return self.click(_Locators.FIRST_ORDER)
+        with allure.step("Open details first order"):
+            return self.click(_Locators.FIRST_ORDER)
 
     @property
     def check_order_number_in_modal(self) -> bool:
-        return self.is_text_present(_Locators.FIRST_ORDER_NUMBER, str(self._order_number))
+        with allure.step("Check order number in modal"):
+            return self.is_text_present(_Locators.FIRST_ORDER_NUMBER, str(self._order_number))
 
     @property
     def is_modal_order_open(self) -> bool:
-        return self.is_element_present(_Locators.OPEN_MODAL)
+        with allure.step("Check modal order open"):
+            return self.is_element_present(_Locators.OPEN_MODAL)
 
     @property
     def is_created_order_visible(self) -> bool:
-        order_num = str(create_order())
-        return self.is_text_present((By.XPATH, f"//p[text()='{order_num}']"), order_num)
+        with allure.step("Check created order visible"):
+            order_num = str(create_order())
+            return self.is_text_present(_Locators.dynamic_order_number(order_num), order_num)
 
     @property
     def total_orders(self) -> int:
-        return int(self.get_text(_Locators.COMPLETED_ORDER_ALL))
+        with allure.step("Get total orders"):
+            return int(self.get_text(_Locators.COMPLETED_ORDER_ALL))
 
     @property
     def is_order_in_work(self) -> bool:
-        order_num = str(create_order())
-        return self.is_text_present((By.XPATH, f"//ul/li[text()='{order_num}']"), order_num)
+        with allure.step("Check order in work"):
+            order_num = str(create_order())
+            return self.is_text_present(_Locators.dynamic_order_number_in_work(order_num), order_num)

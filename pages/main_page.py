@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from core import BasePage
 from core.base_page import WebDriver
@@ -24,37 +25,47 @@ class MainPage(BasePage):
         super().__init__(driver)
         self.page_url = str(environment.BASE_URL)
 
+    @allure.step("Click link account")
     def click_link_account(self) -> None:
         self.click(locator=_Locator.LINK_ACCOUNT)
 
+    @allure.step("Go to feed page")
     def got_to_feed_page(self) -> None:
         self.click(locator=_Locator.LINK_FEED)
 
+    @allure.step("Click first ingredient")
     def click_fist_ingredient(self) -> None:
         self.click(locator=_Locator.LINK_FIRST_INGREDIENT)
 
+    @allure.step("Close modal")
     def close_modal(self) -> None:
         self.click(locator=_Locator.BUTTON_CLOSE_MODAL)
 
     @property
     def is_modal_present(self) -> bool:
-        return self.is_element_present(locator=_Locator.MODAL_OPEN)
+        with allure.step("Check modal present"):
+            return self.is_element_present(locator=_Locator.MODAL_OPEN)
 
     @property
     def is_modal_not_present(self) -> bool:
-        return self.is_element_present(locator=_Locator.MODAL_CLOSE)
+        with allure.step("Check modal not present"):
+            return self.is_element_present(locator=_Locator.MODAL_CLOSE)
 
     @property
     def count_ingredients(self) -> int:
-        return int(self.driver.find_element(*_Locator.COUNTER_FIRST_INGREDIENT).text)
+        with allure.step("Count ingredients"):
+            return int(self.driver.find_element(*_Locator.COUNTER_FIRST_INGREDIENT).text)
 
+    @allure.step("Move element")
     def add_first_ingredient_to_constructor(self) -> None:
         self.move_element(start_locator=_Locator.LINK_FIRST_INGREDIENT, end_locator=_Locator.BURGER_CONSTRUCTOR)
 
+    @allure.step("Create order")
     def create_order(self) -> None:
         self.add_first_ingredient_to_constructor()
         self.click(locator=_Locator.BUTTON_CREATE_ORDER)
 
     @property
     def is_order_created(self) -> bool:
-        return self.is_text_present(locator=_Locator.APPROVE_ORDER_CREATED, text="Ваш заказ начали готовить")
+        with allure.step("Check order created"):
+            return self.is_text_present(locator=_Locator.APPROVE_ORDER_CREATED, text="Ваш заказ начали готовить")

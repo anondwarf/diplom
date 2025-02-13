@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from core import BasePage
 from utils.enums import WebLink
@@ -19,17 +20,22 @@ class LoginPage(BasePage):
         super().__init__(driver)
         self.page_url = str(WebLink.LOGIN)
 
+    @allure.step("Click forgot password link")
     def click_forgot_password_link(self) -> None:
         self.click(locator=_Locators.FORGOT_PASSWORD_LINK)
 
+    @allure.step("Enter email")
     def enter_email(self, email: str) -> None:
         self.input_text(locator=_Locators.INPUT_EMAIL, text=email)
 
+    @allure.step("Enter password")
     def enter_password(self, password: str) -> None:
         self.input_text(locator=_Locators.INPUT_PASSWORD, text=password)
 
+    @allure.step("Click login button")
     def click_login_button(self) -> None:
         self.click(locator=_Locators.LOGIN_BUTTON)
 
+    @allure.step("Go to main page")
     def go_to_main_page(self) -> None:
         self.click(locator=_Locators.LINK_MAIN_PAGE)
