@@ -14,6 +14,7 @@ class TestOrder:
         order_client.generate_random_order_payload()
         response = order_client.post_order
         assert response.status_code == HttpCodes.OK
+        assert response.json()["success"]
 
     @allure.title("Создание заказа без авторизации и список ингредиентов")
     def test_with_auth_and_without_ingredients(self, auth_headers):
@@ -21,6 +22,7 @@ class TestOrder:
         order_client.generate_random_order_payload()
         response = order_client.post_order
         assert response.status_code == HttpCodes.BAD_REQUEST
+        assert not response.json()["success"]
 
     @allure.title("Создание заказа с авторизацией и без списка ингредиентов")
     def test_without_auth_and_with_ingredients(self, auth_headers):
@@ -28,6 +30,7 @@ class TestOrder:
         order_client.headers = auth_headers
         response = order_client.post_order
         assert response.status_code == HttpCodes.BAD_REQUEST
+        assert not response.json()["success"]
 
     @allure.title("Создание заказа с авторизацией и не верными хешами ингредиентов")
     def test_with_auth_and_bad_hash_ingredients(self, auth_headers):
@@ -36,6 +39,7 @@ class TestOrder:
         order_client.payload = generate_random_list(5)
         response = order_client.post_order
         assert response.status_code == HttpCodes.BAD_REQUEST
+        assert not response.json()["success"]
 
     @allure.title("Получение списка заказов пользователя")
     def test_auth_user(self, auth_headers):
@@ -43,9 +47,11 @@ class TestOrder:
         order_client.headers = auth_headers
         response = order_client.get_orders
         assert response.status_code == HttpCodes.OK
+        assert response.json()["success"]
 
     @allure.title("Получение списка заказов")
     def test_no_auth_user(self):
         order_client = Orders()
         response = order_client.get_orders
         assert response.status_code == HttpCodes.UNAUTHORIZED
+        assert not response.json()["success"]

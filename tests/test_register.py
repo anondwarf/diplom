@@ -12,6 +12,7 @@ class TestRegister:
         reg_client = Register()
         response = reg_client.register_new_user
         assert response.status_code == HttpCodes.OK
+        assert response.json()["success"]
         delete_user(response)
 
     @allure.title("Проверка регистрации существующего пользователя")
@@ -19,6 +20,7 @@ class TestRegister:
         reg_client = Register()
         response = reg_client.register_existing_user
         assert response.status_code == HttpCodes.FORBIDDEN
+        assert not response.json()["success"]
 
     @pytest.mark.parametrize("param", ["email", "password", "name"])
     @allure.title("Проверка регистрации пользователя, без ключа {param}")
@@ -26,3 +28,4 @@ class TestRegister:
         reg_client = Register()
         response = reg_client.register_user_bad_payload(param)
         assert response.status_code == HttpCodes.FORBIDDEN
+        assert not response.json()["success"]
