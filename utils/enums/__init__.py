@@ -1,0 +1,1 @@
+from .web_links import WebLink
