@@ -1,0 +1,40 @@
+from utils.http.client import ApiClient
+from utils.helpers import environment
+from utils.enums.api_hands import ApiHands
+from utils.enums.http_methods import HttpMethods
+from utils.helpers import random_user, delete_key_json, generate_headers
+
+
+class Login(ApiClient):
+
+    def __init__(self, payload: dict[str, str] | None = None):
+        self._url = environment.BASE_URL + ApiHands.AUTH_LOGIN
+        self._method = HttpMethods.POST
+        self._payload = payload
+        self._headers = None
+        self._check_payload()
+
+    def _check_payload(self):
+        if self._payload is None:
+            self._payload = environment.user
+
+    @property
+    def login_existing_user(self):
+        payload = delete_key_json(data=self._payload, param="name")
+        return self.custom_requests(method=self._method, url=self._url, data=payload)
+
+    @property
+    def login_non_existing_user(self):
+        user = random_user()
+        user_without_name = delete_key_json(data=user, param="name")
+        return self.custom_requests(method=self._method, url=self._url, data=user_without_name)
+
+    @property
+    def login(self):
+        return self.custom_requests(method=self._method, url=self._url, data=self._payload)
+
+    @property
+    def headers(self):
+        response = self.login_existing_user
+        self._headers = generate_headers(response.json().get("accessToken"))
+        return self._headers
