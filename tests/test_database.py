@@ -25,5 +25,5 @@ class TestDatabase:
             (INGREDIENT_TYPE_FILLING, "dinosaur", 200),
             (INGREDIENT_TYPE_FILLING, "sausage", 300),
         }
-        actual_ingredients = {(ing.type, ing.name, ing.price) for ing in ingredients}
+        actual_ingredients = set(map(lambda ing: (ing.type, ing.name, ing.price), ingredients))
         assert actual_ingredients == expected_ingredients
